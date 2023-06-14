@@ -1,0 +1,33 @@
+name: medcare
+description: A new Flutter project.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.3 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.3.6
+  google_fonts: ^5.0.0
+  page_transition: ^2.0.9
+  shared_preferences: ^2.1.2
+  smooth_page_indicator: ^1.1.0
+  supabase_flutter: ^1.10.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
+    - assets/images/logo/
+    - assets/images/onBoard/
+    - assets/images/login/
+    - assets/images/signup/
