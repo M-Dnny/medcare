@@ -8,6 +8,7 @@ import 'package:medcare/src/screens/auth/login.dart';
 import 'package:medcare/src/screens/auth/welcome_auth.dart';
 import 'package:medcare/src/screens/home/home.dart';
 import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
+import 'package:medcare/src/utils/constant/navigation_service.dart';
 import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/widgets/bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,9 +52,11 @@ Future<void> createAccount(WidgetRef ref, BuildContext context) async {
   }
 }
 
-// LOGIN SERVICE
+// Login Future Provider
 
-Future<void> loginService(WidgetRef ref, BuildContext context) async {
+final loginFutureProvider = FutureProvider.autoDispose<void>((ref) async {
+  var context = NavigationService.navigatorKey.currentState!.context;
+
   var get = ref.watch(loginProvider);
   const snackBar = SnackBar(
     content: Text('Login successfully'),
@@ -80,7 +83,8 @@ Future<void> loginService(WidgetRef ref, BuildContext context) async {
   } catch (e) {
     debugPrint("Try Catch Error: $e");
   }
-}
+  return;
+});
 
 // GET USER SESSION
 

@@ -7,7 +7,6 @@ import 'package:medcare/src/utils/widgets/button_widget.dart';
 import 'package:medcare/src/utils/widgets/footer.dart';
 import 'package:medcare/src/utils/widgets/images_widget.dart';
 import 'package:medcare/src/utils/widgets/text_widget.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Login extends ConsumerWidget {
   Login({super.key});
@@ -117,7 +116,7 @@ class Login extends ConsumerWidget {
     return SubmitButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          loginService(ref, context);
+          ref.watch(loginFutureProvider);
         }
         // Navigator.pushNamed(context, Home.routeName);
       },

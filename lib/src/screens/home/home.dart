@@ -6,6 +6,7 @@ import 'package:icons_flutter/icons_flutter.dart';
 import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 import 'package:medcare/src/utils/widgets/banner_card.dart';
+import 'package:medcare/src/utils/widgets/text_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Home extends ConsumerStatefulWidget {
@@ -21,7 +22,8 @@ class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     final email = supabase.auth.currentUser?.email;
-    final name = supabase.auth.currentUser?.userMetadata!['full_name'];
+    final name = supabase.auth.currentUser?.userMetadata!['full_name'] ??
+        supabase.auth.currentUser?.userMetadata!['fullname'];
 
     final controller = PageController();
     final bannerList = [Banner1(), Banner2(), Banner3()];
@@ -52,11 +54,188 @@ class _HomeState extends ConsumerState<Home> {
                 const SizedBox(height: 10),
 
                 bannerDots(controller, bannerList, context),
+
+                // Best Deals List
+
+                const SizedBox(height: 10),
+
+                bestDealHeader(),
+
+                const SizedBox(height: 10),
+
+                GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      mainAxisExtent: 260),
+                  shrinkWrap: true,
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return bestDealProduct(context);
+                  },
+                )
+
+                // bestDealProduct(context),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  SizedBox bestDealProduct(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      width: 170,
+      child: Card(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+
+                  // Header
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      discountLabel(context),
+                      favIconBtn(),
+                    ],
+                  ),
+                ),
+
+                // Body
+                Container(
+                  height: 95,
+                  width: 95,
+                  decoration: const BoxDecoration(
+                      color: productBg1, shape: BoxShape.circle),
+                ),
+
+                const SizedBox(height: 10),
+
+                Text(
+                  "Dettol Antiseptic Liquid",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.inverseSurface),
+                ),
+                const SizedBox(height: 6),
+
+                Text(
+                  "\$11.33",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Theme.of(context).colorScheme.inverseSurface),
+                ),
+
+                const SizedBox(height: 6),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      star(),
+                      star(),
+                      star(),
+                      star(),
+                      star(),
+                      const Spacer(),
+                      Text(
+                        "4.7",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: greyText),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 40,
+              child: Image.asset("assets/images/home/dettol.png",
+                  fit: BoxFit.contain, height: 104),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container star() {
+    return Container(
+      width: 18,
+      height: 18,
+      margin: const EdgeInsets.only(right: 3),
+      decoration: const ShapeDecoration(
+        gradient: LinearGradient(
+          colors: [myPrimary, Colors.black12],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          stops: [1, 0],
+        ),
+        shape: StarBorder(
+          points: 5,
+          innerRadiusRatio: 0.4,
+          pointRounding: 0.3,
+          squash: 0,
+          valleyRounding: 0,
+          rotation: 0,
+        ),
+      ),
+    );
+  }
+
+  SizedBox favIconBtn() {
+    return SizedBox(
+      height: 35,
+      width: 35,
+      child: IconButton(
+        style: IconButton.styleFrom(iconSize: 20, backgroundColor: red),
+        icon: const Icon(Icons.favorite_rounded, color: Colors.white),
+        onPressed: () {},
+      ),
+    );
+  }
+
+  Container discountLabel(BuildContext context) {
+    return Container(
+      height: 24,
+      width: 34,
+      decoration: BoxDecoration(
+        color: red,
+        borderRadius: BorderRadius.circular(3),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: Center(
+          child: Text(
+            "15%",
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall!
+                .copyWith(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bestDealHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SubTitleText("Best deals"),
+        TextButton(onPressed: () {}, child: const LightText("View all")),
+      ],
     );
   }
 

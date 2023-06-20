@@ -7,6 +7,9 @@ const darkGreenbg = Color(0xFF3C6255);
 const banner1 = Color(0xFF709DA7);
 const banner2 = Color(0xFFA5A5D1);
 const banner3 = Color(0xFFBA7F91);
+const red = Color(0xFF3DB215);
+const productBg1 = Color(0xFFBED5E2);
+const productLabel = Color(0xFF737373);
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
