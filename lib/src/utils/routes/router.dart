@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:medcare/src/screens/auth/forgot_password.dart';
 import 'package:medcare/src/screens/auth/login.dart';
 import 'package:medcare/src/screens/auth/signup.dart';
 import 'package:medcare/src/screens/auth/welcome_auth.dart';
 import 'package:medcare/src/screens/home/home.dart';
 import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
 import 'package:medcare/src/screens/splash/splash.dart';
+import 'package:medcare/src/utils/widgets/bottom_bar.dart';
 import 'package:page_transition/page_transition.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings, settingsController) {
@@ -56,6 +58,23 @@ Route<dynamic> generateRoute(RouteSettings routeSettings, settingsController) {
         settings: routeSettings,
         duration: const Duration(milliseconds: 600),
       );
+
+    case ForgotPassword.routeName:
+      return PageTransition(
+        child: ForgotPassword(),
+        type: PageTransitionType.fade,
+        settings: routeSettings,
+        duration: const Duration(milliseconds: 600),
+      );
+
+    case BottomBar.routeName:
+      return PageTransition(
+        child: const BottomBar(),
+        type: PageTransitionType.fade,
+        settings: routeSettings,
+        duration: const Duration(milliseconds: 600),
+      );
+
     default:
       return MaterialPageRoute(
           builder: (_) => const Scaffold(

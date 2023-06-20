@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
-import 'package:medcare/src/utils/provider/providers.dart';
+import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 
@@ -50,12 +50,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   onBoard() {
     getUserSession(context);
     // Navigator.pushReplacementNamed(context, OnBoarding.routeName);
-    ref.watch(progressProvider.notifier).dispose();
+    // ref.watch(progressProvider.notifier).dispose();
   }
 
   onHome() {
     Navigator.pushReplacementNamed(context, "home.routeName");
-    ref.watch(progressProvider.notifier).dispose();
+    // ref.watch(progressProvider.notifier).dispose();
   }
 
   @override

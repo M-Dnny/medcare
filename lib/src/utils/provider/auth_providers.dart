@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:medcare/src/model/forgot_pass_model.dart';
 import 'package:medcare/src/model/login_model.dart';
 import 'package:medcare/src/model/signup_model.dart';
 
@@ -15,3 +16,9 @@ final loginProvider =
 
 final signupProvider = StateNotifierProvider<SignupNotifier, SignupModel>(
     (ref) => SignupNotifier());
+
+// state Notifier Provider for forgot Password
+
+final forgotpassProvider =
+    StateNotifierProvider<ForgotPasswordNotifier, ForgotPasswordModel>(
+        (ref) => ForgotPasswordNotifier());

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
+import 'package:medcare/src/utils/constant/navigation_service.dart';
 import 'package:medcare/src/utils/routes/router.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 import 'package:medcare/src/utils/theme/typography.dart';
@@ -20,6 +22,7 @@ class MyApp extends StatelessWidget {
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
+          navigatorKey: NavigationService.navigatorKey,
           restorationScopeId: 'app',
           theme: ThemeData(
             useMaterial3: true,

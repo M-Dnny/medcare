@@ -70,7 +70,7 @@ class WelcomeAuth extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .bodyLarge!
-            .copyWith(color: myPrimary, fontWeight: FontWeight.bold),
+            .copyWith(color: greyText, fontWeight: FontWeight.bold),
         children: [
           TextSpan(
             text: "/ Sign up",

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medcare/src/screens/auth/login.dart';
-import 'package:medcare/src/utils/provider/providers.dart';
+import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/widgets/button_widget.dart';
 import 'package:medcare/src/utils/widgets/footer.dart';

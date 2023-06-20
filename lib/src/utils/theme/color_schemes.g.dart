@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 const myPrimary = Color.fromRGBO(222, 172, 43, 1);
 const mySecondary = Color.fromRGBO(38, 202, 192, 1);
+const greyText = Color(0xFF8F8F8F);
+const darkGreenbg = Color(0xFF3C6255);
+const banner1 = Color(0xFF709DA7);
+const banner2 = Color(0xFFA5A5D1);
+const banner3 = Color(0xFFBA7F91);
 
 const lightColorScheme = ColorScheme(
   brightness: Brightness.light,

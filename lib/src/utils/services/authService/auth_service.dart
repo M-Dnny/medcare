@@ -8,9 +8,11 @@ import 'package:medcare/src/screens/auth/login.dart';
 import 'package:medcare/src/screens/auth/welcome_auth.dart';
 import 'package:medcare/src/screens/home/home.dart';
 import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
-import 'package:medcare/src/utils/provider/providers.dart';
+import 'package:medcare/src/utils/provider/auth_providers.dart';
+import 'package:medcare/src/utils/widgets/bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase_provider;
 
 final supabase = Supabase.instance.client;
 
@@ -99,11 +101,14 @@ getUserSession(context) async {
               .then((value) => {
                     if (value.event == AuthChangeEvent.signedIn)
                       {
-                        Navigator.pushNamed(context, Home.routeName),
+                        Navigator.pushReplacementNamed(
+                            context, BottomBar.routeName),
+                        // Navigator.pushReplacementNamed(context, Home.routeName),
                       }
                     else
                       {
-                        Navigator.pushNamed(context, Login.routeName),
+                        Navigator.pushReplacementNamed(
+                            context, WelcomeAuth.routeName),
                       }
                   })
               // ignore: body_might_complete_normally_catch_error
@@ -127,4 +132,20 @@ getUserSession(context) async {
       Navigator.pushReplacementNamed(context, OnBoarding.routeName);
     });
   }
+}
+
+// Logout service
+
+logout(context) async {
+  await supabase.auth.signOut().then((value) =>
+      {Navigator.pushReplacementNamed(context, WelcomeAuth.routeName)});
+}
+
+// Google login
+
+googleLogin() async {
+  await supabase.auth.signInWithOAuth(
+    supabase_provider.Provider.google,
+    redirectTo: "io.supabase.medcare://login-callback/",
+  );
 }

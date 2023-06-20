@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medcare/src/utils/services/authService/auth_service.dart';
 
 class SocialBtnFooter extends StatelessWidget {
   const SocialBtnFooter({super.key});
@@ -39,21 +40,23 @@ class SocialBtnFooter extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                googleLogin();
+              },
               child: Image.asset(
                 'assets/images/google_icon.png',
                 fit: BoxFit.contain,
                 height: 40,
               ),
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/images/apple_icon.png',
-                fit: BoxFit.contain,
-                height: 40,
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {},
+            //   child: Image.asset(
+            //     'assets/images/apple_icon.png',
+            //     fit: BoxFit.contain,
+            //     height: 40,
+            //   ),
+            // ),
           ],
         ),
       ],

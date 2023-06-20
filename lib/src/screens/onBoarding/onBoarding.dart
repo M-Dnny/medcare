@@ -102,7 +102,7 @@ class _OnBoardingState extends State<OnBoarding> {
     );
   }
 
-  Expanded pageview(List<StatelessWidget> pages) {
+  pageview(List<StatelessWidget> pages) {
     return Expanded(
       child: PageView.builder(
           itemCount: pages.length,
@@ -129,23 +129,25 @@ class One extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/onBoard/bottle_of_pills.png",
-              width: 200,
-              height: 290,
-            ),
-            const SizedBox(height: 30),
-            const TitleText("Order Medicines"),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SubText(
-                  "Order your medicines easily and use coupons for best discounts and get cashback. It's a hassle-free process that saves your time and effort."),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/onBoard/bottle_of_pills.png",
+                width: 200,
+                height: 290,
+              ),
+              const SizedBox(height: 30),
+              const TitleText("Order Medicines"),
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SubText(
+                    "Order your medicines easily and use coupons for best discounts and get cashback. It's a hassle-free process that saves your time and effort."),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -159,26 +161,28 @@ class Two extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: Image.asset(
-                "assets/images/onBoard/delivery.png",
-                width: 260,
-                height: 290,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 30),
+                child: Image.asset(
+                  "assets/images/onBoard/delivery.png",
+                  width: 260,
+                  height: 290,
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
-            const TitleText("Get the fastest medicine delivery"),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SubText(
-                  "Order medicines with just few clicks and you can get your orders delivered at your doorstep."),
-            ),
-          ],
+              const SizedBox(height: 30),
+              const TitleText("Get the fastest medicine delivery"),
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SubText(
+                    "Order medicines with just few clicks and you can get your orders delivered at your doorstep."),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -192,23 +196,25 @@ class Three extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/onBoard/online_medicine.png",
-              width: 320,
-              height: 320,
-            ),
-            const SizedBox(height: 30),
-            const TitleText("Online consultation"),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SubText(
-                  "Now you can consult a doctor through online and consultation has made easy and convenient to access healthcare services without leaving home."),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/onBoard/online_medicine.png",
+                width: 320,
+                height: 320,
+              ),
+              const SizedBox(height: 30),
+              const TitleText("Online consultation"),
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SubText(
+                    "Now you can consult a doctor through online and consultation has made easy and convenient to access healthcare services without leaving home."),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -222,23 +228,25 @@ class Four extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/onBoard/calendar.png",
-              width: 320,
-              height: 320,
-            ),
-            const SizedBox(height: 30),
-            const TitleText("Book appointments"),
-            const SizedBox(height: 30),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SubText(
-                  "Now you can book an appointments through online and easily schedule an appointment at your own date & time."),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/onBoard/calendar.png",
+                width: 320,
+                height: 320,
+              ),
+              const SizedBox(height: 30),
+              const TitleText("Book appointments"),
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SubText(
+                    "Now you can book an appointments through online and easily schedule an appointment at your own date & time."),
+              ),
+            ],
+          ),
         ),
       ),
     );
