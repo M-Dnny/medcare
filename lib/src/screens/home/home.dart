@@ -6,6 +6,8 @@ import 'package:icons_flutter/icons_flutter.dart';
 import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 import 'package:medcare/src/utils/widgets/banner_card.dart';
+import 'package:medcare/src/utils/widgets/product_card.dart';
+import 'package:medcare/src/utils/widgets/rating_star.dart';
 import 'package:medcare/src/utils/widgets/text_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -63,19 +65,7 @@ class _HomeState extends ConsumerState<Home> {
 
                 const SizedBox(height: 10),
 
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      mainAxisExtent: 260),
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return bestDealProduct(context);
-                  },
-                )
+                bestDealGrid(),
 
                 // bestDealProduct(context),
               ],
@@ -83,6 +73,32 @@ class _HomeState extends ConsumerState<Home> {
           ),
         ),
       ),
+    );
+  }
+
+  bestDealGrid() {
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          mainAxisExtent: 260),
+      shrinkWrap: true,
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return ProductCard(
+          bgColor: productBg1,
+          discountText: '100%',
+          favIcon: Icons.favorite_rounded,
+          iconColor: Colors.white,
+          iconPress: () {},
+          productImage: 'assets/images/home/dettol.png',
+          productPrice: "\$11.33",
+          productRating: '3.0',
+          productTitle: 'Dettol Liquid',
+        );
+      },
     );
   }
 
