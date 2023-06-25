@@ -1,15 +1,14 @@
-import 'dart:convert';
-
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:medcare/src/screens/auth/login.dart';
+import 'package:medcare/src/utils/provider/auth_appwrite_provider.dart';
 import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/widgets/button_widget.dart';
 import 'package:medcare/src/utils/widgets/footer.dart';
 import 'package:medcare/src/utils/widgets/images_widget.dart';
+import 'package:medcare/src/utils/widgets/text_field.dart';
 import 'package:medcare/src/utils/widgets/text_widget.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Signup extends ConsumerWidget {
   static const routeName = "/signup";
@@ -41,13 +40,13 @@ class Signup extends ConsumerWidget {
 
                     // Full name field
 
-                    nameField(ref, context),
+                    nameField(ref),
 
                     const SizedBox(height: 20),
 
                     // EMAIL Form Fields
 
-                    emailField(ref, context),
+                    emailField(ref),
 
                     const SizedBox(height: 20),
 
@@ -56,10 +55,6 @@ class Signup extends ConsumerWidget {
                     passwordField(ref),
 
                     const SizedBox(height: 24),
-
-                    // Phone Form Fields
-
-                    phoneField(ref, context),
 
                     const SizedBox(height: 24),
 
@@ -80,117 +75,67 @@ class Signup extends ConsumerWidget {
     );
   }
 
-  Row emailField(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/login/email_icon.png',
-            fit: BoxFit.contain, height: 24, width: 24),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) => updateEmail(value, ref),
-            decoration: InputDecoration(
-                hintText: "Email ID",
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error)),
-            validator: (value) => validEmail(value),
-          ),
-        ),
-      ],
+  emailField(WidgetRef ref) {
+    return MyTextField(
+      iconPath: "assets/images/login/email_icon.png",
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
+      hintText: "Email ID",
+      onChanged: (value) => updateEmail(value, ref),
+      validator: (value) => validEmail(value),
+      obscureText: false,
+      sufficIcon: const SizedBox(),
     );
   }
 
-  Row nameField(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/signup/name.png',
-            fit: BoxFit.contain, height: 26, width: 26),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.name,
-            onChanged: (value) => updateFullname(value, ref),
-            decoration: InputDecoration(
-                hintText: "Full name",
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error)),
-            validator: (value) => validFullName(value),
-          ),
-        ),
-      ],
+  nameField(WidgetRef ref) {
+    return MyTextField(
+      iconPath: "assets/images/signup/name.png",
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.name,
+      hintText: "Full name",
+      onChanged: (value) => updateFullname(value, ref),
+      validator: (value) => validFullName(value),
+      obscureText: false,
+      sufficIcon: const SizedBox(),
     );
   }
 
-  Row passwordField(WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/login/pass_icon.png',
-            fit: BoxFit.contain, height: 24, width: 24),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.visiblePassword,
-            onChanged: (value) => updatePassword(value, ref),
-            decoration: const InputDecoration(
-              hintText: "Password",
-            ),
-            validator: (value) => validPassword(value),
-          ),
-        ),
-      ],
+  passwordField(WidgetRef ref) {
+    bool obscureText = ref.watch(passwordVisibleProvider);
+    var obscureTextUpdate = ref.watch(passwordVisibleProvider.notifier);
+    const visibleIcon = Icon(Icons.visibility_rounded);
+    const visibleoffIcon = Icon(Icons.visibility_off_rounded);
+    final suffixIcon = IconButton(
+      onPressed: () {
+        obscureTextUpdate.state = !obscureText;
+      },
+      icon: obscureText ? visibleoffIcon : visibleIcon,
     );
-  }
-
-  Row phoneField(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/signup/phone.png',
-            fit: BoxFit.contain, height: 26, width: 26),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.phone,
-            maxLength: 10,
-            onChanged: (value) => updatePhoneNumber(value, ref),
-            decoration: InputDecoration(
-                hintText: "Phone number",
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error)),
-            validator: (value) => validPhoneNumber(value),
-          ),
-        ),
-      ],
+    return MyTextField(
+      iconPath: "assets/images/login/pass_icon.png",
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.visiblePassword,
+      hintText: "Password",
+      onChanged: (value) => updatePassword(value, ref),
+      validator: (value) => validPassword(value),
+      obscureText: obscureText,
+      sufficIcon: suffixIcon,
     );
   }
 
   SubmitButton submitBtn(WidgetRef ref, BuildContext context) {
     return SubmitButton(
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          debugPrint("ERROR: Failed to");
           createAccount(ref, context);
+          // createDart(ref);
         }
-        // Navigator.pushNamed(context, Home.routeName);
       },
       text: "Sign up",
     );
   }
-  
+
   void updateEmail(String value, WidgetRef ref) {
     ref.read(signupProvider.notifier).updateEmail(value);
   }
@@ -201,10 +146,6 @@ class Signup extends ConsumerWidget {
 
   void updatePassword(String value, WidgetRef ref) {
     ref.read(signupProvider.notifier).updatePassword(value);
-  }
-
-  void updatePhoneNumber(String value, WidgetRef ref) {
-    ref.read(signupProvider.notifier).updatePhoneNumber(value);
   }
 
   validEmail(value) {
@@ -236,17 +177,6 @@ class Signup extends ConsumerWidget {
       return "Password is not strong enough";
     }
 
-    return null;
-  }
-
-  validPhoneNumber(value) {
-    var regx = RegExp(r"^[7-9][0-9]{9}$");
-    if (value.isEmpty) {
-      return "Enter your phone number";
-    }
-    if (!regx.hasMatch(value)) {
-      return "Enter valid phone number";
-    }
     return null;
   }
 }

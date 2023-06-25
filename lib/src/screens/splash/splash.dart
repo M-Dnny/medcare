@@ -48,7 +48,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   onBoard() {
-    getUserSession(context);
+    getUserSession(context, ref);
     // Navigator.pushReplacementNamed(context, OnBoarding.routeName);
     // ref.watch(progressProvider.notifier).dispose();
   }

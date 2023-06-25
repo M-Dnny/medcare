@@ -1,155 +1,153 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, body_might_complete_normally_catch_error
 
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medcare/src/screens/auth/login.dart';
 import 'package:medcare/src/screens/auth/welcome_auth.dart';
-import 'package:medcare/src/screens/home/home.dart';
 import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
-import 'package:medcare/src/utils/constant/navigation_service.dart';
+import 'package:medcare/src/screens/splash/splash.dart';
+import 'package:medcare/src/utils/constant/constant.dart';
+import 'package:medcare/src/utils/provider/auth_appwrite_provider.dart';
 import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/widgets/bottom_bar.dart';
+import 'package:medcare/src/utils/widgets/snack_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supabase_provider;
+import 'package:dart_appwrite/dart_appwrite.dart' as dartAppwrite;
 
-final supabase = Supabase.instance.client;
+var dartClient = dartAppwrite.Client();
+
+Future<void> createDart(ref) async {
+  dartClient
+      .setEndpoint(AppwriteConstant.endPoint)
+      .setProject(AppwriteConstant.projectId)
+      .setKey(AppwriteConstant.apikey);
+
+  final users = dartAppwrite.Users(dartClient);
+  print('Running Create User API');
+  try {
+    final get = ref.watch(signupProvider);
+    final response = await users.create(
+      userId: ID.unique(),
+      email: get.email_id,
+      password: get.password,
+    );
+    print(response.toMap());
+  } on AppwriteException catch (e) {
+    print(e.message);
+  }
+}
 
 // CREATE ACCOUNT SERVICE
 
 Future<void> createAccount(WidgetRef ref, BuildContext context) async {
-  var get = ref.watch(signupProvider);
-
   try {
-    const snackBar = SnackBar(
-      content: Text('Register successfully'),
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.all(16),
-    );
-    await supabase.auth
-        .signUp(
-            email: get.email_id,
-            password: get.password,
-            // phone: get.phone_number,
-            data: {
-              "fullname": get.fullname,
-              "phone": get.phone_number,
-            })
-        .then(
-          (value) => {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar),
-            Navigator.pushNamed(context, Login.routeName),
-          },
+    final account = Account(ref.watch(appwriteClientProvider));
+    final get = ref.watch(signupProvider);
+    await account
+        .create(
+          userId: ID.unique(),
+          email: get.email_id,
+          password: get.password,
+          name: get.fullname,
         )
-        .catchError((onError) => {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(onError.message.toString())))
+        .then((value) => {
+              showSnackBar(context, "Register successfully"),
+              Navigator.pushNamed(context, Login.routeName),
             });
-  } catch (e) {
-    debugPrint("Try Catch Error: $e");
+  } on AppwriteException catch (e) {
+    var error = e.message.toString();
+    showSnackBar(context, error);
   }
 }
 
 // Login Future Provider
 
-final loginFutureProvider = FutureProvider.autoDispose<void>((ref) async {
-  var context = NavigationService.navigatorKey.currentState!.context;
-
-  var get = ref.watch(loginProvider);
-  const snackBar = SnackBar(
-    content: Text('Login successfully'),
-    behavior: SnackBarBehavior.floating,
-    margin: EdgeInsets.all(16),
-  );
-
+Future<void> loginService(WidgetRef ref, BuildContext context) async {
   try {
-    await supabase.auth
-        .signInWithPassword(email: get.email_id, password: get.password)
-        .then(
-          (value) => {
-            ScaffoldMessenger.of(context).showSnackBar(snackBar),
-            Navigator.pushNamed(context, Home.routeName),
-          },
-        )
-        .catchError((onError) => {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(onError.message.toString()),
-                behavior: SnackBarBehavior.floating,
-                margin: const EdgeInsets.all(16),
-              )),
+    final account = Account(ref.watch(appwriteClientProvider));
+    final get = ref.watch(loginProvider);
+    await account
+        .createEmailSession(email: get.email_id, password: get.password)
+        .then((value) => {
+              getUserInfo(ref),
+              showSnackBar(context, "Login successfully"),
+              Navigator.pushNamed(context, BottomBar.routeName),
             });
-  } catch (e) {
-    debugPrint("Try Catch Error: $e");
+  } on AppwriteException catch (e) {
+    var error = e.message.toString();
+    showSnackBar(context, error);
   }
-  return;
-});
+}
 
 // GET USER SESSION
 
-getUserSession(context) async {
-  var token = supabase.auth.currentSession?.accessToken;
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  var firstTime = prefs.getBool('first_time');
-
-  var duration = const Duration(seconds: 1);
-
-  if (firstTime != null && !firstTime) {
-    Timer(duration, () {
-      try {
-        if (token != null) {
-          supabase.auth.onAuthStateChange.first
-              .then((value) => {
-                    if (value.event == AuthChangeEvent.signedIn)
-                      {
-                        Navigator.pushReplacementNamed(
-                            context, BottomBar.routeName),
-                        // Navigator.pushReplacementNamed(context, Home.routeName),
-                      }
-                    else
-                      {
-                        Navigator.pushReplacementNamed(
-                            context, WelcomeAuth.routeName),
-                      }
-                  })
-              // ignore: body_might_complete_normally_catch_error
-              .catchError((onError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(onError.message.toString()),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.all(16),
-            ));
+getUserSession(context, ref) async {
+  try {
+    final account = Account(ref.watch(appwriteClientProvider));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data;
+    var firstTime = prefs.getBool('first_time');
+    if (firstTime != null && !firstTime) {
+      await account.get().then((value) => {
+            if (value.$id != "")
+              {
+                data = jsonEncode(value.toMap()),
+                prefs.setString("user_session", data),
+                ref.watch(nameProvider.notifier).update((state) => value.name),
+                ref
+                    .watch(emailProvider.notifier)
+                    .update((state) => value.email),
+                Navigator.pushReplacementNamed(context, BottomBar.routeName),
+              }
+            else
+              {
+                Navigator.pushReplacementNamed(context, WelcomeAuth.routeName),
+              }
           });
-        } else {
-          Navigator.pushReplacementNamed(context, WelcomeAuth.routeName);
-        }
-      } catch (e) {
-        print("Error: $e");
-      }
-    });
-  } else {
-    Timer(duration, () {
+    } else {
       prefs.setBool('first_time', false);
       Navigator.pushReplacementNamed(context, OnBoarding.routeName);
-    });
+    }
+  } on AppwriteException catch (e) {
+    // var error = e.message.toString();
+    Navigator.pushReplacementNamed(context, WelcomeAuth.routeName);
+    // showSnackBar(context, error);
+  }
+}
+
+getUserInfo(ref) async {
+  try {
+    final account = Account(ref.watch(appwriteClientProvider));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data;
+
+    await account.get().then((value) => {
+          {
+            data = jsonEncode(value.toMap()),
+            prefs.setString("user_session", data),
+            ref.watch(nameProvider.notifier).update((state) => value.name),
+            ref.watch(emailProvider.notifier).update((state) => value.email),
+          }
+        });
+  } catch (e) {
+    debugPrint(e.toString());
   }
 }
 
 // Logout service
 
-logout(context) async {
-  await supabase.auth.signOut().then((value) =>
-      {Navigator.pushReplacementNamed(context, WelcomeAuth.routeName)});
+logout(context, ref) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final account = Account(ref.watch(appwriteClientProvider));
+  await account.deleteSession(sessionId: 'current');
+  await prefs.clear();
+  Navigator.pushReplacementNamed(context, SplashScreen.routeName);
 }
 
 // Google login
 
-googleLogin() async {
-  await supabase.auth.signInWithOAuth(
-    supabase_provider.Provider.google,
-    redirectTo: "io.supabase.medcare://login-callback/",
-  );
-}
+googleLogin() async {}

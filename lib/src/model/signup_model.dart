@@ -9,26 +9,22 @@ class SignupModel {
   final String fullname;
   final String email_id;
   final String password;
-  final String phone_number;
 
   SignupModel({
     required this.fullname,
     required this.email_id,
     required this.password,
-    required this.phone_number,
   });
 
   SignupModel copyWith({
     String? fullname,
     String? email_id,
     String? password,
-    String? phone_number,
   }) {
     return SignupModel(
       fullname: fullname ?? this.fullname,
       email_id: email_id ?? this.email_id,
       password: password ?? this.password,
-      phone_number: phone_number ?? this.phone_number,
     );
   }
 
@@ -37,7 +33,6 @@ class SignupModel {
       'fullname': fullname,
       'email_id': email_id,
       'password': password,
-      'phone_number': phone_number,
     };
   }
 
@@ -46,7 +41,6 @@ class SignupModel {
       fullname: map['fullname'] as String,
       email_id: map['email_id'] as String,
       password: map['password'] as String,
-      phone_number: map['phone_number'] as String,
     );
   }
 
@@ -57,7 +51,7 @@ class SignupModel {
 
   @override
   String toString() {
-    return 'SignupModel(fullname: $fullname, email_id: $email_id, password: $password, phone_number: $phone_number)';
+    return 'SignupModel(fullname: $fullname, email_id: $email_id, password: $password)';
   }
 
   @override
@@ -66,23 +60,18 @@ class SignupModel {
 
     return other.fullname == fullname &&
         other.email_id == email_id &&
-        other.password == password &&
-        other.phone_number == phone_number;
+        other.password == password;
   }
 
   @override
   int get hashCode {
-    return fullname.hashCode ^
-        email_id.hashCode ^
-        password.hashCode ^
-        phone_number.hashCode;
+    return fullname.hashCode ^ email_id.hashCode ^ password.hashCode;
   }
 }
 
 class SignupNotifier extends StateNotifier<SignupModel> {
   SignupNotifier()
-      : super(SignupModel(
-            email_id: "", password: '', fullname: "", phone_number: ""));
+      : super(SignupModel(email_id: "", password: '', fullname: ""));
 
   void updateEmail(String value) {
     state = state.copyWith(email_id: value);
@@ -94,9 +83,5 @@ class SignupNotifier extends StateNotifier<SignupModel> {
 
   void updateFullname(String value) {
     state = state.copyWith(fullname: value);
-  }
-
-  void updatePhoneNumber(String value) {
-    state = state.copyWith(phone_number: value);
   }
 }

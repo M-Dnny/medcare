@@ -1,3 +1,0 @@
-const url = "https://pqmxmwdlotgtufupxdzi.supabase.co";
-const anonKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxbXhtd2Rsb3RndHVmdXB4ZHppIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY0OTU1MjUsImV4cCI6MjAwMjA3MTUyNX0.Kgv3JvahPOKrIcDRVNOf-ZC6wr7VJPYu1FEKgg6Zu6E";

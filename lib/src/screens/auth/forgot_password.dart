@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medcare/src/utils/provider/auth_providers.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 import 'package:medcare/src/utils/widgets/button_widget.dart';
+import 'package:medcare/src/utils/widgets/text_field.dart';
 import 'package:medcare/src/utils/widgets/text_widget.dart';
 
 class ForgotPassword extends ConsumerWidget {
@@ -52,7 +53,7 @@ class ForgotPassword extends ConsumerWidget {
                         .copyWith(color: greyText, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 20),
-                  emailField(ref, context),
+                  emailField(ref),
                   const SizedBox(height: 40),
                   submitBtn(ref, context),
                 ],
@@ -84,30 +85,16 @@ class ForgotPassword extends ConsumerWidget {
     );
   }
 
-  Row emailField(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/login/email_icon.png',
-            fit: BoxFit.contain, height: 24, width: 24),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) => emailSubmit(value, ref),
-            decoration: InputDecoration(
-                hintText: "Email ID",
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error)),
-            validator: (value) {
-              return validEmail(value);
-            },
-          ),
-        ),
-      ],
+  emailField(WidgetRef ref) {
+    return MyTextField(
+      iconPath: "assets/images/login/email_icon.png",
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
+      hintText: "Email ID",
+      onChanged: (value) => emailSubmit(value, ref),
+      validator: (value) => validEmail(value),
+      obscureText: false,
+      sufficIcon: const SizedBox(),
     );
   }
 }

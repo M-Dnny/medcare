@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:medcare/src/screens/onBoarding/onBoarding.dart';
 import 'package:medcare/src/utils/constant/navigation_service.dart';
 import 'package:medcare/src/utils/routes/router.dart';
 import 'package:medcare/src/utils/theme/color_schemes.g.dart';
 import 'package:medcare/src/utils/theme/typography.dart';
+import 'package:medcare/src/utils/widgets/bottom_bar.dart';
 
 import 'settings/settings_controller.dart';
 
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           navigatorKey: NavigationService.navigatorKey,
           restorationScopeId: 'app',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: lightColorScheme,

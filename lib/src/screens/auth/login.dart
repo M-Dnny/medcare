@@ -6,6 +6,7 @@ import 'package:medcare/src/utils/services/authService/auth_service.dart';
 import 'package:medcare/src/utils/widgets/button_widget.dart';
 import 'package:medcare/src/utils/widgets/footer.dart';
 import 'package:medcare/src/utils/widgets/images_widget.dart';
+import 'package:medcare/src/utils/widgets/text_field.dart';
 import 'package:medcare/src/utils/widgets/text_widget.dart';
 
 class Login extends ConsumerWidget {
@@ -67,7 +68,7 @@ class Login extends ConsumerWidget {
 
                     // EMAIL Form Fields
 
-                    emailField(ref, context),
+                    emailField(ref),
 
                     const SizedBox(height: 20),
 
@@ -116,7 +117,7 @@ class Login extends ConsumerWidget {
     return SubmitButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          ref.watch(loginFutureProvider);
+          loginService(ref, context);
         }
         // Navigator.pushNamed(context, Home.routeName);
       },
@@ -124,54 +125,39 @@ class Login extends ConsumerWidget {
     );
   }
 
-  Row passwordField(WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/login/pass_icon.png',
-            fit: BoxFit.contain, height: 24, width: 24),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.visiblePassword,
-            onChanged: (value) => passwordSubmit(value, ref),
-            decoration: const InputDecoration(
-              hintText: "Password",
-            ),
-            validator: (value) {
-              return validPassword(value);
-            },
-          ),
-        ),
-      ],
+  passwordField(WidgetRef ref) {
+    bool obscureText = ref.watch(passwordVisibleProvider);
+    var obscureTextUpdate = ref.watch(passwordVisibleProvider.notifier);
+    const visibleIcon = Icon(Icons.visibility_rounded);
+    const visibleoffIcon = Icon(Icons.visibility_off_rounded);
+    final suffixIcon = IconButton(
+      onPressed: () {
+        obscureTextUpdate.state = !obscureText;
+      },
+      icon: obscureText ? visibleoffIcon : visibleIcon,
+    );
+    return MyTextField(
+      iconPath: "assets/images/login/pass_icon.png",
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.visiblePassword,
+      hintText: "Password",
+      onChanged: (value) => passwordSubmit(value, ref),
+      validator: (value) => validPassword(value),
+      obscureText: obscureText,
+      sufficIcon: suffixIcon,
     );
   }
 
-  Row emailField(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/login/email_icon.png',
-            fit: BoxFit.contain, height: 24, width: 24),
-        const SizedBox(width: 20),
-        Expanded(
-          child: TextFormField(
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) => emailSubmit(value, ref),
-            decoration: InputDecoration(
-                hintText: "Email ID",
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error)),
-            validator: (value) {
-              return validEmail(value);
-            },
-          ),
-        ),
-      ],
+  emailField(WidgetRef ref) {
+    return MyTextField(
+      iconPath: "assets/images/login/email_icon.png",
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.emailAddress,
+      hintText: "Email ID",
+      onChanged: (value) => emailSubmit(value, ref),
+      validator: (value) => validEmail(value),
+      obscureText: false,
+      sufficIcon: const SizedBox(),
     );
   }
 }

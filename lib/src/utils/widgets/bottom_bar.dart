@@ -64,11 +64,15 @@ class BottomBar extends ConsumerWidget {
 
     var screenList = [
       const Home(),
-      const Center(
-        child: Text("Screen 2"),
+      Center(
+        child: ElevatedButton(onPressed: () {}, child: const Text("GET DATA")),
       ),
-      const Center(
-        child: Text("Screen 3"),
+      Center(
+        child: ElevatedButton(
+            onPressed: () {
+              logout(context, ref);
+            },
+            child: const Text("Logout")),
       ),
       const Center(
         child: Text("Screen 4"),
